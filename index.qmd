@@ -261,7 +261,7 @@ viewof reset_filters = Inputs.button("reset filters")
           <h3>
               <a href=${row.url} target="_blank" rel="noopener noreferrer">${row.headline}</a>
           </h3>
-          <p>${row.description}</p>
+          ${md`${row.description}`}
           <input type="checkbox" class="toggle-state" id="toggle-state-${row_index}">
           <label for="toggle-state-${row_index}" class="toggle-button"></label>
           <div class="course-data-extras" id="course_data_extras_${row_index}">
