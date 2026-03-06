@@ -29,15 +29,15 @@ Our sessions are curated to take you from theory to application, ensuring you le
 
 -   **Spatial Transcriptomics & AI:** Explore the frontier of tissue architecture. We will demonstrate how AI identifies patterns in spatial gene expression, allowing you to map cellular functions within their original physical context.
 
--   **scryptIQ Supervised Learning Taster Session** Master the essentials of supervised machine learning in this brief taster session. Using real-world biological data, we’ll walk you through a complete end-to-end workflow — transforming messy, raw data into optimised, high-performance classification models. See firsthand why classical ML is still one of the fastest and most accurate ways to turn biological complexity into predictable insights.
+-   **scryptIQ Supervised Learning Taster Session:** Master the essentials of supervised machine learning in this brief taster session. Using real-world biological data, we’ll walk you through a complete end-to-end workflow — transforming messy, raw data into optimised, high-performance classification models. See firsthand why classical ML is still one of the fastest and most accurate ways to turn biological complexity into predictable insights.
 
--   **AI in Agriculture:** This talk is intended to be a broad “taster” session, aiming to introduce participants to popularAI concepts that appear in the media or consumer marketing documents (e.g. “deep learning”, “large language model”, etc.).
+-   **AI in Agriculture:** This talk is intended to be a broad “taster” session, aiming to introduce participants to popular AI concepts that appear in the media or consumer marketing documents (e.g. “deep learning”, “large language model”, etc.).
 
 -   **Sustainable Science:** Learn the principles of reusable analysis. We’ll show you how to build AI workflows that are reproducible, shareable, and robust enough for high-impact publication.
 
 -   **Applied Bioinformatics Spotlight:** A specialised session led by the KCL Applied Bioinformatics Team. This workshop explores how AI and machine learning act as a bridge for multi-omics integration, unlocking deeper biological insights and high-accuracy predictive modeling.
 
-*This is a draft schedule the final programme will be available from April.*
+*This is a draft schedule, the final programme will be available from April.*
 
 ## Venue 
 
