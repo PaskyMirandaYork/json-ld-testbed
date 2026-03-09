@@ -50,72 +50,73 @@ course_data = transpose(course_data_cached).map(row => {
   };
 })
 ```
-```{python}
-#| eval: true
-import pandas as pd
-import json
-import re
 
-# Load CSV from Google Sheets
-course_data = pd.read_csv(
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRSrvsfFfVwokza_WP9JIzd4Wfg6OKPBJcwelLTqYn1SgigZXnfcU6_apN5gWTMF79n4CRQFNOJ5w6M/pub?gid=1012757406&single=true&output=csv"
-)
+```{ojs}
+//| output: false
+// Remove previous JSON-LD scripts
+document.querySelectorAll('script[data-course-jsonld]').forEach(el => el.remove());
 
-jsonld_scripts = []
+course_data.forEach(row => {
 
-for _, row in course_data.iterrows():
-    # Audience
-    audience_list = [
-        {"@type": "Audience", "audienceType": a.strip()}
-        for a in str(row.get("audience","")).split(",") if a.strip()
-    ]
-    
-    # Keywords (max 20, truncate each to 20 chars)
-    keywords_list = [k.strip()[:20] for k in str(row.get("keywords","")).split(",")[:20] if k.strip()]
+  const jsonld = { "@context": "https://schema.org", "@type": "Course" };
 
-    # Compute timeRequired in hours
-    time_required = "PT13H"  # default
-    time_text = str(row.get("TimeRequired") or row.get("approxTimeRequired") or "")
-    match = re.search(r"([\d\.]+)\s*(hour|day)", time_text, re.IGNORECASE)
-    if match:
-        hours = float(match.group(1))
-        if match.group(2).lower().startswith("day"):
-            hours *= 24
-        time_required = f"PT{int(hours)}H"
+  // Use CSV column for full URL as @id; fallback to row.url
+  jsonld["@id"] = row.identifier?.startsWith("http") ? row.identifier : row.url;
+  jsonld["url"] = row.url;
 
-    # Clean description
-    description = str(row.get("description","")).replace("\n", " ").replace("**","")
-    description = re.sub(r"\[.*?\]\(.*?\)", "", description).strip()
+  // Name and plain-text description
+  jsonld["name"] = row.headline;
+  // Remove markdown/HTML links from description
+  jsonld["description"] = row.description?.replace(/\*\*|\[.*?\]\(.*?\)/g, "").trim();
 
-    # Build JSON-LD
-    jsonld = {
-        "@context": "https://schema.org",
-        "@type": "Course",
-        "@id": row["identifier"] if str(row.get("identifier","")).startswith("http") else row.get("url"),
-        "url": row.get("url"),
-        "name": row.get("headline"),
-        "description": description,
-        "learningResourceType": row.get("learningResourceType","Online Resource"),
-        "educationalLevel": row.get("educationalLevel","level1"),
-        "timeRequired": time_required,
-        "inLanguage": row.get("inLanguage","en"),
-        "isAccessibleForFree": str(row.get("isAccessibleForFree","yes")).lower() == "yes",
-        "provider": {"@type": "Organization", "name": row.get("provider")},
-        "audience": audience_list,
-        "keywords": keywords_list,
-        "hasCourseInstance": False
+  // Educational fields
+  if (row.learningResourceType) jsonld["learningResourceType"] = row.learningResourceType;
+  if (row.educationalLevel) jsonld["educationalLevel"] = row.educationalLevel;
+
+  // Audience
+  if (row.audience) {
+    const audienceArray = row.audience.split(",").map(s => s.trim());
+    jsonld["audience"] = audienceArray.map(a => ({ "@type": "Audience", "audienceType": a }));
+  }
+
+  // Provider
+  if (row.provider) jsonld["provider"] = { "@type": "Organization", "name": row.provider };
+
+  // Time required
+  if (row.TimeRequired || row.approxTimeRequired) {
+    const timeText = row.TimeRequired || row.approxTimeRequired;
+    const match = timeText.match(/([\d\.]+)\s*(hour|day)/i);
+    if (match) {
+      let hours = parseFloat(match[1]);
+      if (match[2].toLowerCase().startsWith("day")) hours *= 24;
+      jsonld["timeRequired"] = `PT${hours}H`;
     }
+  }
 
-    # Convert to <script> tag
-    jsonld_scripts.append(f'<script type="application/ld+json">\n{json.dumps(jsonld, indent=2)}\n</script>')
+  // Language & accessibility
+  jsonld["inLanguage"] = row.inLanguage || "en";
+  jsonld["isAccessibleForFree"] = row.isAccessibleForFree?.toLowerCase() === "yes";
 
-# Expose to Quarto
-ojs_define(jsonld_scripts=jsonld_scripts)
-```
-```{html}
-{% for script in jsonld_scripts %}
-{{ script }}
-{% endfor %}
+  // Keywords - limit to 20 max, truncate to 20 characters
+  if (row.keywords) {
+    jsonld["keywords"] = row.keywords
+      .split(",")
+      .map(k => k.trim())
+      .map(k => k.length > 20 ? k.substring(0, 20) : k)
+      .slice(0, 20);
+  }
+
+  // Always set hasCourseInstance to false for TeSS
+  jsonld["hasCourseInstance"] = false;
+
+  // Create script element
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.dataset.courseJsonld = "true";
+  script.textContent = JSON.stringify(jsonld, null, 2);
+
+  document.head.appendChild(script);
+});
 ```
 
 ```{ojs}
