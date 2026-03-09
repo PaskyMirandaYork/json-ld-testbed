@@ -51,6 +51,7 @@ course_data = transpose(course_data_cached).map(row => {
 })
 ```
 ```{ojs}
+//| eval: true
 //| output: false
 
 document.querySelectorAll('script[data-course-jsonld]').forEach(el => el.remove())
@@ -79,7 +80,6 @@ if (!window.__courses_jsonld_added) {
         "@type": "Organization",
         "name": "UKRI Digital Research Skills Catalyst"
       },
-      // Optional keys added only if they exist
       ...(row.audience ? { audience: { "@type": "Audience", "audienceType": row.audience } } : {}),
       ...(row.projectFunding ? { provider: { "@type": "Organization", "name": row.projectFunding } } : {}),
       ...(row.teaches ? { teaches: row.teaches.split(",").map(t => t.trim()) } : {}),
