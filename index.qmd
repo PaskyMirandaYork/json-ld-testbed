@@ -53,7 +53,7 @@ course_data = transpose(course_data_cached).map(row => {
 
 ```{ojs}
 //| echo: false
-//| output: as-is
+//| output: hidden
 course_data.map(row => {
 
   const jsonld = { "@context": "https://schema.org", "@type": "Course" };
@@ -107,10 +107,16 @@ course_data.map(row => {
   // Always set hasCourseInstance to false for TeSS
   jsonld["hasCourseInstance"] = false;
 
-  return `<script type="application/ld+json" data-course-jsonld>
-${JSON.stringify(jsonld, null, 2)}
-</script>`;
-}).join("\n")
+  // CREATE SCRIPT ELEMENT AND APPEND TO HEAD
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.dataset.courseJsonld = "true";
+  script.textContent = JSON.stringify(jsonld, null, 2);
+
+  // append to head instead of returning
+  document.head.appendChild(script);
+
+});
 ```
 
 ```{ojs}
