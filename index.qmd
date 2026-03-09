@@ -50,6 +50,37 @@ course_data = transpose(course_data_cached).map(row => {
   };
 })
 ```
+```{ojs}
+//| output: false
+
+// Prevent duplicates during reactive reruns
+document.querySelectorAll('script[data-course-jsonld]').forEach(el => el.remove())
+
+course_data.forEach(row => {
+
+  const jsonld = {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "@id": row.identifier || row.url,
+    "name": row.headline,
+    "description": row.description,
+    "url": row.url,
+    "provider": {
+      "@type": "Organization",
+      "name": row.projectFunding
+    },
+    "audience": row.audience,
+    "timeRequired": row.TimeRequired,
+    "learningResourceType": row.learningResourceType
+  }
+
+  const script = document.createElement("script")
+  script.type = "application/ld+json"
+  script.dataset.courseJsonld = "true"
+  script.textContent = JSON.stringify(jsonld)
+
+  document.head.appendChild(script)
+})
 
 ```{ojs}
 // This cell defines the possible values we can use to populate the filter dropdowns directly from the data in `course_data`.
