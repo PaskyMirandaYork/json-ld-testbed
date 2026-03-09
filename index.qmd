@@ -58,26 +58,51 @@ document.querySelectorAll('script[data-course-jsonld]').forEach(el => el.remove(
 
 course_data.forEach(row => {
 
-  const jsonld = {
-    "@context": "https://schema.org",
-    "@type": "LearningResource",
-    "@id": row.identifier || row.url,
-    "name": row.headline,
-    "description": row.description,
-    "url": row.url,
-    "provider": {
-      "@type": "Organization",
-      "name": row.projectFunding
-    },
-    "audience": row.audience,
-    "timeRequired": row.TimeRequired,
-    "learningResourceType": row.learningResourceType
-  }
+    const jsonld = {
+      "@context": [
+        "https://schema.org",
+        {
+          "bioschemas": "https://bioschemas.org/"
+        }
+      ],
+      "@type": "LearningResource",
+      "@id": row.identifier || row.url,
+      "url": row.url,
+      "name": row.headline,
+      "description": row.description,
+      "learningResourceType": row.learningResourceType,
+      "audience": row.audience ? {
+        "@type": "Audience",
+        "audienceType": row.audience
+      } : undefined,
+      "provider": row.projectFunding ? {
+        "@type": "Organization",
+        "name": row.projectFunding
+      } : undefined,
+      "timeRequired": row.TimeRequired,
+      "teaches": row.teaches
+        ? row.teaches.split(",").map(t => t.trim())
+        : undefined,
+      "competencyRequired": row.competencyRequired
+        ? row.competencyRequired.split(",").map(t => t.trim())
+        : undefined,
+      "educationalLevel": row.audience,
+      "keywords": [
+        row.learningResourceType,
+        row.audience
+      ].filter(Boolean),
+      "isAccessibleForFree": true,
+      "inLanguage": "en",
+      "publisher": {
+        "@type": "Organization",
+        "name": "UKRI Digital Research Skills Catalyst"
+      }
+    }
 
-  const script = document.createElement("script")
-  script.type = "application/ld+json"
-  script.dataset.courseJsonld = "true"
-  script.textContent = JSON.stringify(jsonld)
+    const script = document.createElement("script")
+    script.type = "application/ld+json"
+    script.dataset.courseJsonld = "true"
+    script.textContent = JSON.stringify(jsonld)
 
   document.head.appendChild(script)
 })
