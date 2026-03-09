@@ -57,10 +57,7 @@ document.querySelectorAll('script[data-course-jsonld]').forEach(el => el.remove(
 
 course_data.forEach(row => {
 
-  const jsonld = { "@context": "https://schema.org" };
-
-  // Use CSV column for type if it exists
-  if (row.schemaVersion) jsonld["@type"] = "Course";
+  const jsonld = { "@context": "https://schema.org", "@type": "Course" };
 
   // @id and url
   if (row.identifier) jsonld["@id"] = row.identifier;
@@ -70,24 +67,30 @@ course_data.forEach(row => {
   if (row.headline) jsonld["name"] = row.headline;
   if (row.description) jsonld["description"] = row.description;
 
-  // Educational fields
-  if (row.learningResourceType) jsonld["educationalResourceType"] = row.learningResourceType;
+  // Learning resource type and educational level
+  if (row.learningResourceType) jsonld["learningResourceType"] = row.learningResourceType;
   if (row.educationalLevel) jsonld["educationalLevel"] = row.educationalLevel;
 
-  // Audience (comma-separated values)
+  // Audience (comma-separated)
   if (row.audience) {
     const audienceArray = row.audience.split(",").map(s => s.trim());
-    if (audienceArray.length === 1) {
-      jsonld["audience"] = { "@type": "Audience", "audienceType": audienceArray[0] };
-    } else {
-      jsonld["audience"] = audienceArray.map(a => ({ "@type": "Audience", "audienceType": a }));
-    }
+    jsonld["audience"] = audienceArray.map(a => ({ "@type": "Audience", "audienceType": a }));
   }
 
-  // Provider and publisher
+  // Provider
   if (row.provider) jsonld["provider"] = { "@type": "Organization", "name": row.provider };
-  if (row.projectFunding) jsonld["funding"] = row.projectFunding;
-  if (row.sdPublisher) jsonld["publisher"] = { "@type": "Organization", "name": row.sdPublisher };
+
+  // Keywords (trim to ~20 to avoid TeSS errors)
+  if (row.keywords) {
+    const keywordsArray = row.keywords.split(",").map(k => k.trim());
+    jsonld["keywords"] = keywordsArray.slice(0, 20);
+  }
+
+  // Authors as Person objects
+  if (row.author) {
+    const authors = row.author.split(",").map(a => a.trim());
+    jsonld["author"] = authors.map(a => ({ "@type": "Person", "name": a }));
+  }
 
   // Time required
   if (row.TimeRequired || row.approxTimeRequired) {
@@ -101,22 +104,17 @@ course_data.forEach(row => {
   }
 
   // Language and accessibility
-  if (row.inLanguage) jsonld["inLanguage"] = row.inLanguage;
-  if (row.isAccessibleForFree != null) jsonld["isAccessibleForFree"] = row.isAccessibleForFree === "yes";
+  if (row.inLanguage) jsonld["inLanguage"] = row.inLanguage.toLowerCase();
+  jsonld["isAccessibleForFree"] = row.isAccessibleForFree === "yes";
 
-  // Optional metadata
-  if (row.keywords) jsonld["keywords"] = row.keywords.split(",").map(k => k.trim());
-  if (row.license) jsonld["license"] = row.license;
-  if (row.author) jsonld["author"] = row.author;
-  if (row.contributor) jsonld["contributor"] = row.contributor;
-  if (row.maintainer) jsonld["maintainer"] = row.maintainer;
-  if (row.version) jsonld["version"] = row.version;
+  // Explicitly mark no course instance for TeSS
+  jsonld["hasCourseInstance"] = false;
 
   // Create script element
   const script = document.createElement("script");
   script.type = "application/ld+json";
   script.dataset.courseJsonld = "true";
-  script.textContent = JSON.stringify(jsonld);
+  script.textContent = JSON.stringify(jsonld, null, 2);
 
   document.head.appendChild(script);
 });
