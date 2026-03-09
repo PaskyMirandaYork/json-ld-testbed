@@ -57,29 +57,62 @@ document.querySelectorAll('script[data-course-jsonld]').forEach(el => el.remove(
 
 course_data.forEach(row => {
 
-  // Build JSON-LD dynamically: include only fields present in the CSV
   const jsonld = { "@context": "https://schema.org" };
 
-  // Add @type if it exists
-  if (row.bioschemasType) jsonld["@type"] = row.bioschemasType;
+  // Use CSV column for type if it exists
+  if (row.schemaVersion) jsonld["@type"] = row.schemaVersion;
 
-  // Add @id or url if they exist
-  if (row.url) jsonld["@id"] = row.url;
+  // @id and url
+  if (row.identifier) jsonld["@id"] = row.identifier;
   if (row.url) jsonld["url"] = row.url;
 
-  // Map other fields dynamically
+  // Name and description
   if (row.headline) jsonld["name"] = row.headline;
   if (row.description) jsonld["description"] = row.description;
-  if (row.learningResourceType) jsonld["educationalResourceType"] = row.learningResourceType;
-  if (row.audience) jsonld["audience"] = { "@type": "Audience", "audienceType": row.audience };
-  if (row.projectFunding) jsonld["provider"] = { "@type": "Organization", "name": row.projectFunding };
-  if (row.time_hours != null) jsonld["timeRequired"] = `PT${row.time_hours}H`;
-  if (row.language) jsonld["inLanguage"] = row.language;
-  if (row.isAccessibleForFree != null) jsonld["isAccessibleForFree"] = row.isAccessibleForFree;
-  if (row.educationalLevel) jsonld["educationalLevel"] = row.educationalLevel;
-  if (row.publisherName) jsonld["publisher"] = { "@type": "Organization", "name": row.publisherName };
 
-  // Create the script tag
+  // Educational fields
+  if (row.learningResourceType) jsonld["educationalResourceType"] = row.learningResourceType;
+  if (row.educationalLevel) jsonld["educationalLevel"] = row.educationalLevel;
+
+  // Audience (comma-separated values)
+  if (row.audience) {
+    const audienceArray = row.audience.split(",").map(s => s.trim());
+    if (audienceArray.length === 1) {
+      jsonld["audience"] = { "@type": "Audience", "audienceType": audienceArray[0] };
+    } else {
+      jsonld["audience"] = audienceArray.map(a => ({ "@type": "Audience", "audienceType": a }));
+    }
+  }
+
+  // Provider and publisher
+  if (row.provider) jsonld["provider"] = { "@type": "Organization", "name": row.provider };
+  if (row.projectFunding) jsonld["funding"] = row.projectFunding;
+  if (row.sdPublisher) jsonld["publisher"] = { "@type": "Organization", "name": row.sdPublisher };
+
+  // Time required
+  if (row.TimeRequired || row.approxTimeRequired) {
+    const timeText = row.TimeRequired || row.approxTimeRequired;
+    const match = timeText.match(/([\d\.]+)\s*(hour|day)/i);
+    if (match) {
+      let hours = parseFloat(match[1]);
+      if (match[2].toLowerCase().startsWith("day")) hours *= 24;
+      jsonld["timeRequired"] = `PT${hours}H`;
+    }
+  }
+
+  // Language and accessibility
+  if (row.inLanguage) jsonld["inLanguage"] = row.inLanguage;
+  if (row.isAccessibleForFree != null) jsonld["isAccessibleForFree"] = row.isAccessibleForFree === "yes";
+
+  // Optional metadata
+  if (row.keywords) jsonld["keywords"] = row.keywords.split(",").map(k => k.trim());
+  if (row.license) jsonld["license"] = row.license;
+  if (row.author) jsonld["author"] = row.author;
+  if (row.contributor) jsonld["contributor"] = row.contributor;
+  if (row.maintainer) jsonld["maintainer"] = row.maintainer;
+  if (row.version) jsonld["version"] = row.version;
+
+  // Create script element
   const script = document.createElement("script");
   script.type = "application/ld+json";
   script.dataset.courseJsonld = "true";
