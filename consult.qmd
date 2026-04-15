@@ -14,3 +14,61 @@ format:
 ::: consultation-button-container
 [Request a consultation](https://docs.google.com/forms/d/e/1FAIpQLSfZzkuJIe5j5dADrvhOsB_CILZ_QExxxFESWph_69tGfLZw4Q/viewform?embedded=true){.consultation-button .external target="_self"}
 :::
+
+```{=html}
+<!-- Preload FontAwesome -->
+```
+
+[{{< fa solid puzzle-piece >}}]{style="display: none;"}
+
+<div id="consult-cards">
+
+<div class="consult-card">
+  <div class="icon">
+    <i class="fa-solid fa-puzzle-piece"></i>
+  </div>
+  <h3>Tackle Analytical Problems</h3>
+  <p>Get fresh perspectives on complex data analysis and research methodology.</p>
+</div>
+
+<div class="consult-card">
+  <div class="icon">
+    <i class="fa-solid fa-code"></i>
+  </div>
+  <h3>Debug Your Code</h3>
+  <p>Resolve coding issues and learn best practices for research software development.</p>
+</div>
+
+<div class="consult-card">
+  <div class="icon">
+    <i class="fa-solid fa-chart-line"></i>
+  </div>
+  <h3>Improve Data Visualization</h3>
+  <p>Create compelling visualizations that effectively communicate your research findings.</p>
+</div>
+
+<div class="consult-card">
+  <div class="icon">
+    <i class="fa-solid fa-database"></i>
+  </div>
+  <h3>Manage Research Data</h3>
+  <p>Design effective strategies for organizing, storing, and sharing your research data.</p>
+</div>
+
+<div class="consult-card">
+  <div class="icon">
+    <i class="fa-solid fa-laptop-code"></i>
+  </div>
+  <h3>Choose the Right Tools</h3>
+  <p>Find the most appropriate software and platforms for your research workflows.</p>
+</div>
+
+<div class="consult-card">
+  <div class="icon">
+    <i class="fa-solid fa-rocket"></i>
+  </div>
+  <h3>Accelerate Your Project</h3>
+  <p>Get expert guidance to overcome technical obstacles and move your research forward.</p>
+</div>
+
+</div>
