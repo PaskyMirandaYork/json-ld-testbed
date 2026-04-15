@@ -42,35 +42,12 @@ Get help to...
 
 <div class="consult-card">
   <div class="icon">
-    <i class="fa-solid fa-chart-line"></i>
-  </div>
-  <h3>Improve Data Visualization</h3>
-  <p>Create compelling visualizations that effectively communicate your research findings.</p>
-</div>
-
-<div class="consult-card">
-  <div class="icon">
     <i class="fa-solid fa-database"></i>
   </div>
   <h3>Manage Research Data</h3>
   <p>Design effective strategies for organizing, storing, and sharing your research data.</p>
 </div>
 
-<div class="consult-card">
-  <div class="icon">
-    <i class="fa-solid fa-laptop-code"></i>
-  </div>
-  <h3>Choose the Right Tools</h3>
-  <p>Find the most appropriate software and platforms for your research workflows.</p>
-</div>
-
-<div class="consult-card">
-  <div class="icon">
-    <i class="fa-solid fa-rocket"></i>
-  </div>
-  <h3>Accelerate Your Project</h3>
-  <p>Get expert guidance to overcome technical obstacles and move your research forward.</p>
-</div>
 
 </div>
 ```
