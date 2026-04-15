@@ -1,17 +1,41 @@
 ---
 title: "Contact"
 format:
-  html
+  html:
+    toc: false
 ---
 
-::: hero
-For general enquiries please contact
-[research-digital-skills\@york.ac.uk](mailto:research-digital-skills@york.ac.uk)
-:::
+[{{< fa solid envelope >}}]{style="display: none;"}
 
-<h2>Follow us</h2>
+```{=html}
+<div id="contact-cards">
 
-Follow with us on social media for event updates and community news:
+<div class="contact-card">
+  <div class="icon">
+    <i class="fa-solid fa-envelope"></i>
+  </div>
+  <h3>General Enquiries</h3>
+  <p>For questions about our training programmes, events, or consultation services:</p>
+  <a href="mailto:research-digital-skills@york.ac.uk">research-digital-skills@york.ac.uk</a>
+</div>
 
--   [Linkedin](https://uk.linkedin.com/company/ukri-digital-research-skills-catalyst)
--   [Bluesky](https://bsky.app/profile/ukriskillscatalyst.bsky.social)
+<div class="contact-card">
+  <div class="icon">
+    <i class="fa-brands fa-linkedin"></i>
+  </div>
+  <h3>LinkedIn</h3>
+  <p>Follow us for event updates, training opportunities, and community news:</p>
+  <a href="https://uk.linkedin.com/company/ukri-digital-research-skills-catalyst" target="_blank" rel="noopener noreferrer">UKRI Digital Research Skills Catalyst</a>
+</div>
+
+<div class="contact-card">
+  <div class="icon">
+    <i class="fa-brands fa-bluesky"></i>
+  </div>
+  <h3>Bluesky</h3>
+  <p>Connect with us on Bluesky for the latest updates:</p>
+  <a href="https://bsky.app/profile/ukriskillscatalyst.bsky.social" target="_blank" rel="noopener noreferrer">@ukriskillscatalyst.bsky.social</a>
+</div>
+
+</div>
+```
