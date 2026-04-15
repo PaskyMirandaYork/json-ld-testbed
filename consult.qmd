@@ -19,7 +19,7 @@ consultation](https://docs.google.com/forms/d/e/1FAIpQLSfZzkuJIe5j5dADrvhOsB_CIL
 
 [{{< fa solid puzzle-piece >}}]{style="display: none;"}
 
-## Get help to...
+# Get help to...
 
 ```{=html}
 <div id="consult-cards">
