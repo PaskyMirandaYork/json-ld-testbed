@@ -11,6 +11,8 @@ format:
       - index-header.css
 ---
 
+#   This event has now passed. Please look out for our future events.
+
 ![](https://upload.wikimedia.org/wikipedia/commons/d/db/York_Guildhall.jpg){fig-alt="The Guildhall in York" fig-align="center" style="width:100%; height:auto;"}
 
 # About the Conference
