@@ -112,7 +112,7 @@ for _, row in df.iterrows():
     if pd.notna(row.get("keywords")):
         jsonld["keywords"] = [
             k.strip()[:20] for k in str(row["keywords"]).split(",")
-        ][:20]
+        ]
 
     scripts.append(
         f'<script type="application/ld+json">\n{json.dumps(jsonld,indent=2)}\n</script>'
