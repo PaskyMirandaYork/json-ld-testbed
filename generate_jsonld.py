@@ -26,12 +26,6 @@ for _, row in df.iterrows():
     if pd.notna(row.get("learningResourceType")):
         jsonld["learningResourceType"] = row["learningResourceType"]
 
-    if pd.notna(row.get("educationalLevel")):
-        jsonld["educationalLevel"] = row["educationalLevel"]
-
-    if pd.notna(row.get("educationalAlignment")):
-        jsonld["educationalAlignment"] = row["educationalAlignment"]
-
     if pd.notna(row.get("audience")):
         jsonld["audience"] = [
             {"@type":"Audience","audienceType":a.strip()}
