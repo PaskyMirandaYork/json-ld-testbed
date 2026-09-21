@@ -32,12 +32,6 @@ for _, row in df.iterrows():
     if pd.notna(row.get("educationalAlignment")):
         jsonld["educationalAlignment"] = row["educationalAlignment"]
 
-    if pd.notna(row.get("competencyRequired")):
-        jsonld["competencyRequired"] = row["competencyRequired"]
-
-    if pd.notna(row.get("teaches")):
-        jsonld["teaches"] = row["teaches"]
-
     if pd.notna(row.get("audience")):
         jsonld["audience"] = [
             {"@type":"Audience","audienceType":a.strip()}
